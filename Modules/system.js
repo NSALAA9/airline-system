@@ -19,5 +19,5 @@ eventsPool.on('arrived', (flightDetails) => {
   //console.log('Pilot: flight with ID', flightDetails.flightID, 'has arrived');
   console.log('Flight:', flightDetails);
 
-  console.log('Manager: we are greatly thankful for the amazing flight,', flightDetails.details.pilot);
+  //console.log('Manager: we are greatly thankful for the amazing flight,', flightDetails.details.pilot);
 });

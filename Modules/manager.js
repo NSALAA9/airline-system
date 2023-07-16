@@ -24,5 +24,5 @@ setInterval(() => {
 //Listen for 'flight-arrived' event
 eventsPool.on('arrived', (flightDetails) => {
 
- //console.log(`Manager: We are greatly thankful for the amazing flight, ${flightDetails.details.pilot}`);
+console.log(`Manager: We are greatly thankful for the amazing flight, ${flightDetails.details.pilot}`);
 });
