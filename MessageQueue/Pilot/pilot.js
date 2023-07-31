@@ -1,40 +1,46 @@
 
-"use strict";
 
-const port = process.env.PORT || 3000;
+'use strict';
 
-const ioClient = require("socket.io-client");
+require('dotenv').config();
+const port = process.env.PORT || 7000;
+//let host = `http://localhost:${port}/`;
+const { v4: uuidv4 } = require('uuid');
+const { faker } = require('@faker-js/faker');
+const ioClient = require('socket.io-client');
 const airlineSocket = ioClient.connect(`http://localhost:${port}/airline`);
-
-const Socket = ioClient.connect(`http://localhost:${port}`);
-
-Socket.on("new-flight", NewFlight);
-Socket.on("get-all", getAllFlights);
+const socket = ioClient.connect(`http://localhost:${port}`);
 
 
 
-function NewFlight(payload) {
+
+
+socket.on('new-flight', (flight) => {
     setTimeout(() => {
-        console.log(
-            `Pilot: flight with ID ${payload.Details.flightID} took-off`
-        );
-        payload.event = "took-off";
-        payload.time = new Date();
-        airlineSocket.emit("took-off", payload);
+        console.log(`Pilot: flight with ID '${flight.details.flightID}' took-off`);
+        flight.event='took-off'
+        flight.time=new Date()
+        airlineSocket.emit('took-off', flight);
+
+        socket.emit('get-all')
+        socket.on('flight', (flight)=>{
+        console.log('Pilot:Sorry i didnt catch this flight ID',flight.id)
+        socket.emit('recieved', flight)
+        });
     }, 4000);
 
-    setTimeout(() => {
-        console.log(
-            `Pilot: flight with ID ${payload.Details.flightID} has Arrived`
-        );
-        payload.event = "Arrived";
-        payload.time = new Date();
-        Socket.emit("Arrived", payload);
-    }, 7000);
-}
 
-function getAllFlights(payload) {
-    setTimeout(() => {
-        console.log("Payload", payload);
-    }, 3000);
-}
+
+setTimeout(() => {
+    console.log(`Pilot: flight with ID ${flight.details.flightID} arrived`)
+        flight.event='arrived'
+        flight.time=new Date()
+    socket.emit('arrived', flight);
+}, 7000);
+});
+
+
+
+
+
+
